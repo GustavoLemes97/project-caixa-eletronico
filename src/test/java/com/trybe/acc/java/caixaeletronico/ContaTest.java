@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Teste da classe Conta")
 class ContaTest {
-  public static final double QUANTIA_SAQUE = 5000;
-  public static final double QUANTIA_DEPOSITO = 2000;
+  public static final double QUANTIA_SAQUE = 1000;
+  public static final double QUANTIA_DEPOSITO = 5000;
   public static final String DESCRICAO_SAQUE = "Saque Efetuado";
   public static final String DESCRICAO_DEPOSITO = "Depósito recebido";
   public static final String TIPO_CONTA = "Corrente";
@@ -42,8 +42,8 @@ class ContaTest {
   @Test
   @DisplayName("7 - Testa o método adicionar transação e retornar saldo da conta.")
   void adicionarTransacaoTestRetornarSaldoTest() {
-    conta.adicionarTransacao(QUANTIA_SAQUE, DESCRICAO_SAQUE);
-    conta.adicionarTransacao(QUANTIA_SAQUE, DESCRICAO_SAQUE);
+    conta.adicionarTransacao(QUANTIA_DEPOSITO, DESCRICAO_DEPOSITO);
+    conta.adicionarTransacao(QUANTIA_DEPOSITO, DESCRICAO_DEPOSITO);
     double saldoTotal = conta.retornarSaldo();
 
     assertEquals(10000, saldoTotal);
@@ -52,7 +52,7 @@ class ContaTest {
   @Test
   @DisplayName("8 - Testa o método retornar resumo está retornando uma string com os valores corretamente.")
   void retornarResumoContaTest() {
-    conta.adicionarTransacao(QUANTIA_SAQUE, DESCRICAO_SAQUE);
+    conta.adicionarTransacao(QUANTIA_DEPOSITO, DESCRICAO_DEPOSITO);
     String idConta = conta.getIdConta();
     double saldoTotal = conta.retornarSaldo();
     String resumoConta = conta.retornarResumoConta();
@@ -65,15 +65,16 @@ class ContaTest {
   @Test
   @DisplayName("9 - Testa o método retornar extrato está imprimindo os valores corretamente.")
   void retornarExtratoTest() {
-    conta.adicionarTransacao(QUANTIA_SAQUE, DESCRICAO_SAQUE);
     conta.adicionarTransacao(QUANTIA_DEPOSITO, DESCRICAO_DEPOSITO);
+    conta.adicionarTransacao(QUANTIA_SAQUE, DESCRICAO_SAQUE);
+
     conta.retornarExtrato();
     String stringSaida = saida.toString();
 
-    assertTrue(stringSaida.contains(DESCRICAO_SAQUE));
-    assertTrue(stringSaida.contains(String.valueOf(QUANTIA_SAQUE)));
     assertTrue(stringSaida.contains(DESCRICAO_DEPOSITO));
     assertTrue(stringSaida.contains(String.valueOf(QUANTIA_DEPOSITO)));
+    assertTrue(stringSaida.contains(DESCRICAO_SAQUE));
+    assertTrue(stringSaida.contains(String.valueOf(QUANTIA_SAQUE)));
   }
 
   @Test
