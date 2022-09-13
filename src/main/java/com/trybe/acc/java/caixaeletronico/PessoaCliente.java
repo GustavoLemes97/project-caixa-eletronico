@@ -42,7 +42,9 @@ public class PessoaCliente {
   }
 
   public void retornarResumoContas() {
-    this.contas.stream().map(Conta::retornarResumoConta);
+    this.contas
+            .stream()
+            .map(Conta::retornarResumoConta);
   }
   public String getCpf() {
     return this.cpf;

@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Banco {
 
-  public ArrayList<Conta> contas = new ArrayList<>();
-  public ArrayList<PessoaCliente> pessoasClientes = new ArrayList<>();
+  private ArrayList<Conta> contas = new ArrayList<>();
+  private ArrayList<PessoaCliente> pessoasClientes = new ArrayList<>();
 
   public String gerarNumeroNovaConta() {
     Random random = new Random();
