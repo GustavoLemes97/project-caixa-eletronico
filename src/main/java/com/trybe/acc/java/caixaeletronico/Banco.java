@@ -3,18 +3,28 @@ package com.trybe.acc.java.caixaeletronico;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Classe é a responsável por criar novas pessoas clientes no banco
+ * e também verificar e validar o login da pessoa cliente no caixa eletrônico.
+ */
 public class Banco {
 
-  private ArrayList<Conta> contas = new ArrayList<>();
-  private ArrayList<PessoaCliente> pessoasClientes = new ArrayList<>();
+  private final ArrayList<Conta> contas = new ArrayList<>();
+  private final ArrayList<PessoaCliente> pessoasClientes = new ArrayList<>();
 
+  /**
+   * Método que gera o número da conta.
+   */
   public String gerarNumeroNovaConta() {
     Random random = new Random();
 
-    return String.valueOf(random.nextInt((99999 - 10000) + 1))
-            + random.nextInt((99999 - 10000) + 1);
+    return String.valueOf(random.nextInt(89999) + 10000)
+            .concat(String.valueOf(random.nextInt(89999) + 10000));
   }
 
+  /**
+   * Método que adiciona o cliente.
+   */
   public PessoaCliente adicionarPessoaCliente(String nome, String cpf, String senha) {
     PessoaCliente pessoaCliente = new PessoaCliente(nome, cpf, senha);
     this.pessoasClientes.add(pessoaCliente);
@@ -26,6 +36,9 @@ public class Banco {
     this.contas.add(novaConta);
   }
 
+  /**
+   * Método que verificar o login do cliente.
+   */
   public PessoaCliente pessoaClienteLogin(String cpf, String senha) {
     return this.pessoasClientes
             .stream()
@@ -33,13 +46,23 @@ public class Banco {
             .findAny().orElse(null);
   }
 
-  public void transferirFundos(PessoaCliente pessoaCliente, int contaOrigem, int contaDestino, double quantia) {
-    pessoaCliente.adicionarTransacaoContaEspecifica(contaOrigem, quantia, "Transferência realizada.");
-    pessoaCliente.adicionarTransacaoContaEspecifica(contaDestino, quantia, "Transferência recebida.");
+  /**
+   * Método que transfere fundos entre contas.
+   */
+  public void transferirFundos(PessoaCliente pessoaCliente,
+                               int contaOrigem,
+                               int contaDestino,
+                               double quantia) {
+    pessoaCliente.adicionarTransacaoContaEspecifica(contaOrigem,
+            quantia,
+            "Transferência realizada.");
+    pessoaCliente.adicionarTransacaoContaEspecifica(contaDestino,
+            quantia,
+            "Transferência recebida.");
   }
 
   public void sacar(PessoaCliente pessoaCliente, int contaOrigem, double quantia) {
-    pessoaCliente.adicionarTransacaoContaEspecifica(contaOrigem, quantia, "Saque Efetuado");
+    pessoaCliente.adicionarTransacaoContaEspecifica(contaOrigem, quantia * -1, "Saque Efetuado");
   }
 
   public void depositar(PessoaCliente pessoaCliente, int contaDestino, double quantia) {

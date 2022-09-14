@@ -1,9 +1,12 @@
 package com.trybe.acc.java.caixaeletronico;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,9 +21,19 @@ class BancoTest {
   public static final int DA_CONTA = 1;
   public static final double VALOR_DEPOSITADO = 3000;
   public static final double VALOR_TRANSFERIDO = 1000;
-
   private final ByteArrayOutputStream saida = new ByteArrayOutputStream();
+  private final PrintStream saidaOriginal = System.out;
   Banco banco = new Banco();
+
+  @BeforeEach
+  void initEach() {
+    System.setOut(new PrintStream(saida));
+  }
+
+  @AfterEach
+  public void restore() {
+    System.setOut(saidaOriginal);
+  }
 
   @Test
   @DisplayName("1 - Testa o gerador de número único para nova conta.")
@@ -53,29 +66,39 @@ class BancoTest {
   @DisplayName("4 - Testa se o método transferir fundos está transferindo corretamente.")
   void depositarTestTransferirFundosTestmostrarExtratoTest() {
     PessoaCliente pessoaCliente = banco.adicionarPessoaCliente(NOME, CPF_VALIDO, SENHA);
+    Conta contaCorrente = new Conta("Corrente", pessoaCliente, banco);
+    Conta contaPoupanca = new Conta("Poupança", pessoaCliente, banco);
+
+    pessoaCliente.adicionarConta(contaCorrente);
+    pessoaCliente.adicionarConta(contaPoupanca);
     banco.depositar(pessoaCliente, PARA_CONTA, VALOR_DEPOSITADO);
     banco.transferirFundos(pessoaCliente, DA_CONTA, PARA_CONTA, VALOR_TRANSFERIDO);
     banco.mostrarExtrato(pessoaCliente, PARA_CONTA);
     String stringSaida = saida.toString();
 
-    assertTrue(stringSaida.contains("DEPÓSITO"));
-    assertTrue(stringSaida.contains("+3000.0"));
-    assertTrue(stringSaida.contains("TRANSFERÊNCIA"));
-    assertTrue(stringSaida.contains("-1000.0"));
+    assertTrue(stringSaida.contains("Depósito"));
+    assertTrue(stringSaida.contains("3000.0"));
+    assertTrue(stringSaida.contains("Transferência"));
+    assertTrue(stringSaida.contains("1000.0"));
   }
 
   @Test
   @DisplayName("5 - Testa se o método sacar está funcionando corretamente.")
   void depositarTestSacarTestMostrarExtratoTest() {
     PessoaCliente pessoaCliente = banco.adicionarPessoaCliente(NOME, CPF_VALIDO, SENHA);
+    Conta contaCorrente = new Conta("Corrente", pessoaCliente, banco);
+    Conta contaPoupanca = new Conta("Poupança", pessoaCliente, banco);
+
+    pessoaCliente.adicionarConta(contaCorrente);
+    pessoaCliente.adicionarConta(contaPoupanca);
     banco.depositar(pessoaCliente, PARA_CONTA, VALOR_DEPOSITADO);
-    banco.sacar(pessoaCliente, DA_CONTA, VALOR_TRANSFERIDO);
+    banco.sacar(pessoaCliente, PARA_CONTA, VALOR_TRANSFERIDO);
     banco.mostrarExtrato(pessoaCliente, PARA_CONTA);
     String stringSaida = saida.toString();
 
-    assertTrue(stringSaida.contains("DEPÓSITO"));
-    assertTrue(stringSaida.contains("+3000.0"));
-    assertTrue(stringSaida.contains("SAQUE"));
+    assertTrue(stringSaida.contains("Depósito"));
+    assertTrue(stringSaida.contains("3000.0"));
+    assertTrue(stringSaida.contains("Saque"));
     assertTrue(stringSaida.contains("-1000.0"));
   }
 }

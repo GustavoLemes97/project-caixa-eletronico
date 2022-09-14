@@ -1,14 +1,19 @@
 package com.trybe.acc.java.caixaeletronico;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
+/**
+ * Classe que representa os clientes do banco.
+ */
 public class PessoaCliente {
   private final String nomeCompleto;
   private final String cpf;
   private final String senha;
-  private ArrayList<Conta> contas = new ArrayList<>();
+  private final ArrayList<Conta> contas = new ArrayList<>();
 
+  /**
+   * Método construtor que cria pessoas.
+   */
   public PessoaCliente(String nomeCompleto, String cpf, String senha) {
     this.nomeCompleto = nomeCompleto;
     this.cpf = cpf;
@@ -42,10 +47,9 @@ public class PessoaCliente {
   }
 
   public void retornarResumoContas() {
-    this.contas
-            .stream()
-            .map(Conta::retornarResumoConta);
+    this.contas.forEach(Conta::retornarResumoConta);
   }
+
   public String getCpf() {
     return this.cpf;
   }
